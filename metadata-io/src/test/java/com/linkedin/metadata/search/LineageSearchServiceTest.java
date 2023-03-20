@@ -38,10 +38,12 @@ import com.linkedin.metadata.search.ranker.SimpleRanker;
 import com.linkedin.metadata.search.utils.QueryUtils;
 import com.linkedin.metadata.utils.elasticsearch.IndexConvention;
 import com.linkedin.metadata.utils.elasticsearch.IndexConventionImpl;
+import com.sun.istack.internal.Nullable;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -454,10 +456,20 @@ public class LineageSearchServiceTest extends AbstractTestNGSpringContextTests {
 
   }
 
+  @Test
+  public void testTimestampSearch() throws Exception {
+
+  }
+
   // Convenience method to reduce spots where we're sending the same params
   private LineageSearchResult searchAcrossLineage(@Nullable Filter filter, @Nullable String input) {
+    return searchAcrossLineage(filter, input, null, null);
+  }
+
+  // Convenience method to reduce spots where we're sending the same params
+  private LineageSearchResult searchAcrossLineage(@Nullable Filter filter, @Nullable String input, @Nullable Long startTimeMillis, @Nullable Long endTimeMillis) {
     return _lineageSearchService.searchAcrossLineage(TEST_URN, LineageDirection.DOWNSTREAM, ImmutableList.of(), input,
-        null, filter, null, 0, 10, null, null,
+        null, filter, null, 0, 10, startTimeMillis, endTimeMillis,
         new SearchFlags().setSkipCache(true));
   }
 }
